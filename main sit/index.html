@@ -1,0 +1,2173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>chillreach.ai — Cold Email Infrastructure & Lead Generation</title>
+  <meta name="description" content="chillreach.ai builds the infrastructure, finds the leads, writes the copy, and runs the campaigns. You just take the calls."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+    :root {
+      --bg:    #05050A;
+      --bg2:   #09090F;
+      --card:  #0D0D14;
+      --card2: #111118;
+      --b:     rgba(255,255,255,0.06);
+      --b2:    rgba(255,255,255,0.11);
+      --p:     #FF6500;
+      --p2:    #FF8533;
+      --gold:  #FFA040;
+      --green: #22C55E;
+      --text:  #EDEDEF;
+      --muted: #6B6B78;
+      --dim:   #35353F;
+      --r:     12px;
+    }
+
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Inter',sans-serif;
+      background:var(--bg);
+      color:#EDEDEF;
+      line-height:1.6;
+      overflow-x:hidden;
+    }
+
+    /* ── GRAIN ── */
+    body::after{
+      content:'';
+      position:fixed;inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events:none;z-index:9999;opacity:1;
+    }
+
+    /* ── NAV ── */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:500;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 48px;height:64px;
+      transition:all .3s;
+    }
+    nav.solid{
+      background:rgba(5,5,10,0.9);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--b);
+    }
+    .logo{
+      display:flex;align-items:center;gap:9px;
+      font-family:'Space Grotesk',sans-serif;
+      font-size:1.15rem;font-weight:700;
+      color:var(--p);text-decoration:none;
+      letter-spacing:-0.02em;
+    }
+    .logo-mark{
+      background:transparent;
+      display:flex;align-items:center;justify-content:center;
+      flex-shrink:0;
+    }
+    .logo .hi{color:var(--p);}
+    .nav-mid{display:flex;gap:32px;list-style:none;}
+    .nav-mid a{
+      font-size:.82rem;font-weight:500;
+      color:var(--muted);text-decoration:none;
+      transition:color .2s;letter-spacing:.01em;
+    }
+    .nav-mid a:hover{color:#EDEDEF;}
+    .nav-r{display:flex;align-items:center;gap:10px;}
+
+    .btn{
+      display:inline-flex;align-items:center;gap:7px;
+      font-family:'Inter',sans-serif;
+      font-size:.82rem;font-weight:600;
+      border:none;cursor:pointer;text-decoration:none;
+      transition:all .2s;border-radius:50px;padding:9px 20px;
+    }
+    .btn-o{
+      background:var(--p);color:#000;font-weight:700;
+      box-shadow:0 0 20px rgba(255,101,0,.3);
+    }
+    .btn-o:hover{transform:translateY(-1px);box-shadow:0 0 32px rgba(255,101,0,.5);}
+    .btn-g{background:transparent;color:var(--muted);border:1px solid var(--b2);}
+    .btn-g:hover{color:#EDEDEF;border-color:rgba(255,255,255,.2);}
+
+    /* ── HERO ── */
+    #hero{
+      position:relative;
+      min-height:100vh;
+      display:grid;
+      grid-template-columns:1fr 420px;
+      align-items:center;
+      gap:60px;
+      padding:120px 48px 80px;
+      overflow:hidden;
+    }
+    canvas#dots{
+      position:absolute;inset:0;
+      pointer-events:none;
+      opacity:.7;
+    }
+    .hero-left{position:relative;z-index:2;}
+    .hero-eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      margin-bottom:28px;
+    }
+    .live-dot{
+      width:7px;height:7px;background:var(--green);
+      border-radius:50%;animation:pulse 2s infinite;
+    }
+    @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}50%{box-shadow:0 0 0 6px rgba(34,197,94,0)}}
+    .eyebrow-text{
+      font-size:.72rem;font-weight:600;letter-spacing:.1em;
+      text-transform:uppercase;color:var(--muted);
+    }
+    .hero-h1{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(3.4rem,6.5vw,7rem);
+      font-weight:700;
+      line-height:1.0;
+      letter-spacing:-.04em;
+      margin-bottom:28px;
+    }
+    .hero-h1 em{
+      font-style:italic;font-weight:300;
+      color:var(--p);
+    }
+    .hero-sub{
+      font-size:1rem;color:var(--muted);
+      max-width:480px;line-height:1.72;
+      margin-bottom:40px;
+    }
+    .hero-sub strong{color:#EDEDEF;font-weight:500;}
+    .hero-btns{display:flex;align-items:center;gap:12px;margin-bottom:52px;}
+    .btn-xl{padding:14px 30px;font-size:.9rem;border-radius:8px;}
+    .hero-proof{
+      display:flex;align-items:center;gap:6px;
+      font-size:.76rem;color:var(--muted);
+    }
+    .proof-avatars{display:flex;}
+    .proof-av{
+      width:26px;height:26px;border-radius:50%;
+      border:2px solid var(--bg);
+      margin-left:-8px;font-size:.65rem;
+      font-weight:700;display:flex;
+      align-items:center;justify-content:center;
+    }
+    .proof-av:first-child{margin-left:0;}
+    .av1{background:linear-gradient(135deg,var(--p),#CC5200);color:#000;}
+    .av2{background:linear-gradient(135deg,#3B82F6,#1D4ED8);}
+    .av3{background:linear-gradient(135deg,var(--green),#15803D);}
+    .av4{background:linear-gradient(135deg,#EC4899,#9333EA);}
+
+    /* Hero right — floating widget */
+    .hero-right{position:relative;z-index:2;}
+    .stats-widget{
+      background:var(--card);
+      border:1px solid var(--b2);
+      border-radius:16px;
+      overflow:hidden;
+      box-shadow:0 32px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,101,0,.06);
+    }
+    .sw-header{
+      background:var(--card2);
+      padding:14px 18px;
+      display:flex;align-items:center;justify-content:space-between;
+      border-bottom:1px solid var(--b);
+    }
+    .sw-title{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);}
+    .sw-status{
+      display:flex;align-items:center;gap:6px;
+      font-size:.68rem;font-weight:600;color:var(--green);
+    }
+    .sw-dot{width:5px;height:5px;background:var(--green);border-radius:50%;animation:pulse 2s infinite;}
+    .sw-body{padding:20px;}
+    .sw-row{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:10px 0;
+      border-bottom:1px solid var(--b);
+    }
+    .sw-row:last-child{border-bottom:none;}
+    .sw-label{font-size:.76rem;color:var(--muted);}
+    .sw-val{
+      font-family:'JetBrains Mono',monospace;
+      font-size:.82rem;font-weight:500;color:#EDEDEF;
+    }
+    .sw-val.green{color:var(--green);}
+    .sw-val.orange{color:var(--p2);}
+    .sw-bar-wrap{margin-top:18px;}
+    .sw-bar-label{
+      display:flex;justify-content:space-between;
+      font-size:.68rem;color:var(--muted);margin-bottom:7px;
+    }
+    .sw-bar-bg{height:4px;background:rgba(255,255,255,.06);border-radius:2px;}
+    .sw-bar-fill{height:4px;border-radius:2px;transition:width 1s ease;}
+    .fill-orange{background:var(--p);}
+    .fill-green{background:var(--green);}
+    .sw-footer{
+      margin-top:18px;padding-top:14px;border-top:1px solid var(--b);
+      font-size:.68rem;color:var(--dim);
+      font-family:'JetBrains Mono',monospace;
+    }
+
+    /* ── TICKER ── */
+    #ticker{
+      background:var(--p);
+      padding:13px 0;
+      overflow:hidden;
+    }
+    .ticker-track{
+      display:flex;
+      animation:tick 22s linear infinite;
+      white-space:nowrap;width:max-content;
+    }
+    .ticker-track2{
+      display:flex;
+      animation:tick2 28s linear infinite;
+      white-space:nowrap;width:max-content;
+      margin-top:8px;
+    }
+    #ticker.double{padding:10px 0;}
+    @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    @keyframes tick2{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+    .tick-item{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:.78rem;font-weight:700;
+      letter-spacing:.08em;text-transform:uppercase;
+      color:#000;padding:0 28px;
+      display:flex;align-items:center;gap:28px;
+    }
+    .tick-sep{opacity:.3;font-size:1rem;}
+
+    /* ── MANIFESTO ── */
+    #manifesto{
+      padding:130px 48px;
+      display:grid;grid-template-columns:200px 1fr;
+      gap:80px;align-items:start;
+    }
+    .manifesto-label{
+      writing-mode:vertical-rl;
+      transform:rotate(180deg);
+      font-size:.68rem;font-weight:600;
+      letter-spacing:.15em;text-transform:uppercase;
+      color:var(--p);
+      margin-top:8px;
+    }
+    .manifesto-body h2{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(2rem,3.5vw,3.4rem);
+      font-weight:700;letter-spacing:-.04em;
+      line-height:1.15;max-width:780px;
+    }
+    .manifesto-body h2 mark{
+      background:none;
+      color:var(--p);
+      font-style:italic;font-weight:300;
+    }
+    .manifesto-cols{
+      display:grid;grid-template-columns:1fr 1fr;
+      gap:48px;margin-top:52px;max-width:780px;
+    }
+    .manifesto-col p{font-size:.9rem;color:var(--muted);line-height:1.75;}
+    .manifesto-col p strong{color:#EDEDEF;font-weight:500;}
+
+    /* ── SERVICES (expandable list) ── */
+    #services{
+      padding:0 48px 130px;
+      border-top:1px solid var(--b);
+    }
+    .services-top{
+      display:flex;align-items:flex-end;
+      justify-content:space-between;
+      padding:52px 0 48px;
+      flex-wrap:wrap;gap:20px;
+    }
+    .services-top h2{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(1.8rem,3vw,2.6rem);
+      font-weight:700;letter-spacing:-.04em;
+    }
+    .services-note{
+      font-size:.8rem;color:var(--muted);
+      max-width:280px;text-align:right;line-height:1.6;
+    }
+    .svc-list{border-top:1px solid var(--b);}
+    .svc-row{
+      border-bottom:1px solid var(--b);
+      cursor:pointer;
+      position:relative;overflow:hidden;
+    }
+    .svc-row::after{
+      content:'';position:absolute;
+      bottom:0;left:0;width:0;height:1px;
+      background:var(--p);transition:width .4s ease;
+    }
+    .svc-row:hover::after,.svc-row.open::after{width:100%;}
+    .svc-head{
+      display:grid;
+      grid-template-columns:72px 1fr auto;
+      align-items:center;
+      gap:32px;padding:28px 0;
+    }
+    .svc-num{
+      font-family:'JetBrains Mono',monospace;
+      font-size:.68rem;font-weight:500;
+      color:var(--p);letter-spacing:.1em;
+    }
+    .svc-name{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(1.3rem,2.2vw,1.9rem);
+      font-weight:600;letter-spacing:-.03em;
+      transition:color .2s;
+    }
+    .svc-row:hover .svc-name{color:var(--p2);}
+    .svc-tag{
+      font-size:.7rem;font-weight:600;
+      letter-spacing:.05em;text-transform:uppercase;
+      color:var(--muted);border:1px solid var(--b2);
+      padding:5px 12px;border-radius:50px;
+      white-space:nowrap;transition:all .3s;
+    }
+    .svc-row:hover .svc-tag,.svc-row.open .svc-tag{
+      border-color:rgba(255,101,0,.35);color:var(--p2);
+    }
+    .svc-arrow{
+      font-size:1.1rem;color:var(--muted);
+      transition:transform .3s,color .2s;margin-left:16px;
+    }
+    .svc-row.open .svc-arrow{transform:rotate(45deg);color:var(--p);}
+    .svc-body{
+      max-height:0;overflow:hidden;
+      transition:max-height .45s ease;
+    }
+    .svc-body-inner{
+      display:grid;grid-template-columns:72px 1fr 320px;
+      gap:32px;padding-bottom:36px;
+    }
+    .svc-desc{font-size:.9rem;color:var(--muted);line-height:1.75;}
+    .svc-desc p{margin-bottom:16px;}
+    .svc-desc p:last-child{margin-bottom:0;}
+    .svc-feats{
+      list-style:none;display:flex;
+      flex-direction:column;gap:10px;
+    }
+    .svc-feats li{
+      display:flex;align-items:flex-start;
+      gap:10px;font-size:.82rem;color:var(--muted);
+      line-height:1.5;
+    }
+    .svc-feats li::before{
+      content:'→';color:var(--p);
+      font-size:.72rem;margin-top:1px;flex-shrink:0;
+    }
+    .svc-cta-wrap{
+      display:flex;flex-direction:column;
+      align-items:flex-start;gap:12px;
+    }
+    .svc-price-tag{
+      font-family:'JetBrains Mono',monospace;
+      font-size:.72rem;color:var(--muted);
+      border:1px dashed var(--b2);
+      padding:8px 14px;border-radius:8px;
+      line-height:1.5;
+    }
+
+    /* ── NUMBERS ── */
+    #numbers{
+      background:var(--bg2);
+      border-top:1px solid var(--b);
+      border-bottom:1px solid var(--b);
+      padding:90px 48px;
+    }
+    .numbers-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:0;
+    }
+    .num-item{
+      padding:0 40px;
+      border-right:1px solid var(--b);
+    }
+    .num-item:first-child{padding-left:0;}
+    .num-item:last-child{border-right:none;}
+    .num-val{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(3rem,5vw,5.5rem);
+      font-weight:700;letter-spacing:-.05em;
+      line-height:1;
+      background:linear-gradient(135deg,#EDEDEF,var(--p2));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      margin-bottom:10px;
+    }
+    .num-label{
+      font-size:.74rem;color:var(--muted);
+      text-transform:uppercase;letter-spacing:.08em;
+      font-weight:500;
+    }
+    .num-sub{
+      font-size:.78rem;color:var(--dim);
+      margin-top:4px;
+    }
+
+    /* ── PROCESS ── */
+    #process{padding:130px 48px;}
+    .process-top{margin-bottom:72px;}
+    .process-top h2{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(1.8rem,3vw,2.6rem);
+      font-weight:700;letter-spacing:-.04em;margin-bottom:10px;
+    }
+    .process-top p{font-size:.88rem;color:var(--muted);line-height:1.6;}
+    .process-steps{
+      display:grid;grid-template-columns:repeat(6,1fr);
+      gap:0;position:relative;
+    }
+    .process-steps::before{
+      content:'';position:absolute;
+      top:22px;left:calc(100%/12);right:calc(100%/12);
+      height:1px;background:linear-gradient(90deg,var(--p),rgba(255,101,0,.2));
+      opacity:.4;pointer-events:none;
+    }
+    .p-step{padding:0 16px 0 0;position:relative;}
+    .p-step:last-child{padding-right:0;}
+    .p-num{
+      width:44px;height:44px;
+      border:1px solid var(--p);
+      border-radius:50%;
+      font-family:'JetBrains Mono',monospace;
+      font-size:.78rem;color:var(--p);
+      display:flex;align-items:center;justify-content:center;
+      margin-bottom:20px;position:relative;z-index:1;
+      background:var(--bg);transition:background .3s;
+    }
+    .p-step:hover .p-num{background:rgba(255,101,0,.1);}
+    .p-step h4{
+      font-size:.88rem;font-weight:600;
+      margin-bottom:8px;letter-spacing:-.01em;
+    }
+    .p-step p{font-size:.78rem;color:var(--muted);line-height:1.6;}
+
+    /* ── CASE STUDIES ── */
+    #cases{
+      padding:0 48px 130px;
+      border-top:1px solid var(--b);
+    }
+    .cases-top{
+      padding:52px 0 48px;
+      display:flex;align-items:flex-end;
+      justify-content:space-between;flex-wrap:wrap;gap:20px;
+    }
+    .cases-top h2{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(1.8rem,3vw,2.6rem);
+      font-weight:700;letter-spacing:-.04em;
+    }
+    .cases-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .case-card{
+      background:var(--card);border:1px solid var(--b);
+      border-radius:16px;padding:36px;
+      transition:all .3s;position:relative;overflow:hidden;
+    }
+    .case-card::before{
+      content:'';position:absolute;
+      top:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,var(--p),transparent);
+      opacity:0;transition:opacity .3s;
+    }
+    .case-card:hover{transform:translateY(-3px);border-color:rgba(255,101,0,.2);}
+    .case-card:hover::before{opacity:1;}
+    .case-industry{
+      font-size:.68rem;font-weight:700;
+      letter-spacing:.1em;text-transform:uppercase;
+      color:var(--p2);margin-bottom:16px;
+    }
+    .case-co{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:1.3rem;font-weight:700;
+      letter-spacing:-.03em;margin-bottom:10px;
+    }
+    .case-desc{font-size:.84rem;color:var(--muted);line-height:1.65;margin-bottom:28px;}
+    .case-nums{display:flex;gap:28px;flex-wrap:wrap;}
+    .case-num-val{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:1.8rem;font-weight:700;letter-spacing:-.04em;
+      background:linear-gradient(135deg,#EDEDEF,var(--p2));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .case-num-lbl{font-size:.7rem;color:var(--dim);margin-top:2px;font-weight:500;}
+
+    /* ── INFRA ── */
+    #infra{
+      background:var(--bg2);
+      border-top:1px solid var(--b);
+      padding:130px 48px;
+    }
+    .infra-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+    .infra-left h2{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(1.8rem,3vw,2.8rem);
+      font-weight:700;letter-spacing:-.04em;margin-bottom:16px;
+    }
+    .infra-left p{font-size:.9rem;color:var(--muted);line-height:1.75;margin-bottom:32px;}
+    .infra-feats{display:flex;flex-direction:column;gap:12px;}
+    .i-feat{
+      display:flex;gap:14px;align-items:flex-start;
+      padding:16px;background:var(--card);
+      border:1px solid var(--b);border-radius:10px;
+      transition:border-color .3s;
+    }
+    .i-feat:hover{border-color:rgba(255,101,0,.22);}
+    .i-feat-icon{
+      width:36px;height:36px;flex-shrink:0;
+      background:rgba(255,101,0,.08);
+      border:1px solid rgba(255,101,0,.15);
+      border-radius:8px;display:flex;
+      align-items:center;justify-content:center;
+      font-size:15px;
+    }
+    .i-feat h4{font-size:.84rem;font-weight:600;margin-bottom:3px;}
+    .i-feat p{font-size:.76rem;color:var(--muted);line-height:1.5;}
+    .infra-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;}
+    .i-badge{
+      font-size:.72rem;font-weight:600;
+      padding:5px 12px;border-radius:50px;
+      background:rgba(255,101,0,.08);
+      border:1px solid rgba(255,101,0,.18);
+      color:var(--p2);
+    }
+
+    /* terminal */
+    .terminal{
+      background:#06060C;border:1px solid var(--b2);
+      border-radius:14px;overflow:hidden;
+      box-shadow:0 24px 80px rgba(0,0,0,.6);
+    }
+    .t-bar{
+      background:#0C0C14;padding:11px 16px;
+      display:flex;align-items:center;gap:7px;
+      border-bottom:1px solid var(--b);
+    }
+    .t-d{width:11px;height:11px;border-radius:50%;}
+    .t-r{background:#FF5F57}.t-y{background:#FFBD2E}.t-g{background:#28C840}
+    .t-ttl{
+      margin-left:10px;font-size:.7rem;
+      color:var(--muted);font-family:'JetBrains Mono',monospace;
+    }
+    .t-body{
+      padding:22px;font-family:'JetBrains Mono',monospace;
+      font-size:.74rem;line-height:1.9;
+    }
+    .tc{color:#2A2A3A}.tk{color:var(--p2)}.tv{color:var(--green)}
+    .ti{color:var(--gold)}.tw{color:#FBBF24}
+    .t-cur{
+      display:inline-block;width:7px;height:13px;
+      background:var(--p2);vertical-align:middle;
+      animation:blink 1.2s step-end infinite;
+    }
+    @keyframes blink{50%{opacity:0}}
+
+    /* ── VIDEO TESTIMONIALS ── */
+    #videos{padding:130px 48px;border-top:1px solid var(--b);}
+    .vid-top{
+      display:flex;align-items:flex-end;
+      justify-content:space-between;margin-bottom:52px;
+      flex-wrap:wrap;gap:20px;
+    }
+    .vid-top h2{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(1.8rem,3vw,2.6rem);
+      font-weight:700;letter-spacing:-.04em;
+    }
+    .vid-top p{font-size:.84rem;color:var(--muted);max-width:280px;text-align:right;line-height:1.6;}
+    .vid-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+    .vid-card{
+      background:var(--card);border:1px solid var(--b);
+      border-radius:14px;overflow:hidden;transition:all .3s;
+    }
+    .vid-card:hover{border-color:rgba(255,101,0,.25);transform:translateY(-3px);}
+    .vid-thumb{
+      aspect-ratio:16/9;background:var(--card2);
+      position:relative;overflow:hidden;cursor:pointer;
+    }
+    .vid-thumb iframe{width:100%;height:100%;border:none;display:block;}
+    .vid-placeholder{
+      position:absolute;inset:0;
+      display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:14px;
+      background:linear-gradient(160deg,rgba(255,101,0,.07),rgba(0,0,0,.7));
+    }
+    .play{
+      width:52px;height:52px;border-radius:50%;
+      background:var(--p);color:#000;
+      display:flex;align-items:center;justify-content:center;
+      font-size:18px;transition:transform .2s,box-shadow .2s;
+      box-shadow:0 0 24px rgba(255,101,0,.4);
+    }
+    .vid-card:hover .play{transform:scale(1.1);box-shadow:0 0 36px rgba(255,101,0,.6);}
+    .vid-placeholder span{font-size:.7rem;color:var(--dim);}
+    .vid-info{padding:18px 20px 20px;}
+    .vid-name{font-size:.88rem;font-weight:700;margin-bottom:3px;}
+    .vid-role{font-size:.74rem;color:var(--muted);margin-bottom:9px;}
+    .vid-quote{font-size:.8rem;color:var(--muted);line-height:1.55;font-style:italic;}
+    .vid-hint{
+      text-align:center;margin-top:36px;
+      font-size:.72rem;color:var(--dim);line-height:1.7;
+    }
+    .vid-hint code{
+      font-family:'JetBrains Mono',monospace;
+      background:rgba(255,101,0,.08);
+      color:var(--p2);padding:2px 7px;border-radius:4px;
+    }
+
+    /* ── PULL QUOTES ── */
+    #quotes{
+      background:var(--bg2);
+      border-top:1px solid var(--b);
+      border-bottom:1px solid var(--b);
+      padding:100px 48px;
+      overflow:hidden;
+    }
+    .quotes-label{
+      font-size:.68rem;font-weight:700;letter-spacing:.12em;
+      text-transform:uppercase;color:var(--muted);
+      margin-bottom:52px;text-align:center;
+    }
+    .quotes-track{
+      display:flex;gap:24px;
+      overflow-x:auto;
+      scrollbar-width:none;padding-bottom:4px;
+      scroll-snap-type:x mandatory;
+    }
+    .quotes-track::-webkit-scrollbar{display:none;}
+    .q-card{
+      background:var(--card);border:1px solid var(--b);
+      border-radius:14px;padding:32px;
+      min-width:360px;max-width:380px;flex-shrink:0;
+      scroll-snap-align:start;transition:border-color .3s;
+    }
+    .q-card:hover{border-color:rgba(255,101,0,.2);}
+    .q-mark{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:3.5rem;font-weight:700;
+      color:var(--p);line-height:.8;
+      margin-bottom:14px;opacity:.7;
+    }
+    .q-text{
+      font-size:.9rem;color:#EDEDEF;
+      line-height:1.72;margin-bottom:22px;
+      font-style:italic;
+    }
+    .q-stars{color:var(--p);font-size:.75rem;letter-spacing:3px;margin-bottom:16px;}
+    .q-author{display:flex;align-items:center;gap:10px;}
+    .q-av{
+      width:36px;height:36px;border-radius:50%;
+      font-size:.8rem;font-weight:700;
+      display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    }
+    .qa1{background:linear-gradient(135deg,var(--p),#CC5200);color:#000;}
+    .qa2{background:linear-gradient(135deg,#3B82F6,#1D4ED8);}
+    .qa3{background:linear-gradient(135deg,var(--green),#15803D);}
+    .qa4{background:linear-gradient(135deg,#F97316,#DC2626);}
+    .qa5{background:linear-gradient(135deg,var(--gold),#FF8533);color:#000;}
+    .qa6{background:linear-gradient(135deg,#EC4899,#9333EA);}
+    .q-name{font-size:.82rem;font-weight:700;}
+    .q-role{font-size:.72rem;color:var(--muted);}
+    .quotes-nav{
+      display:flex;justify-content:center;
+      gap:8px;margin-top:32px;
+    }
+    .q-arrow{
+      width:36px;height:36px;
+      background:var(--card);border:1px solid var(--b2);
+      border-radius:50%;display:flex;align-items:center;justify-content:center;
+      font-size:14px;cursor:pointer;color:var(--muted);
+      transition:all .2s;
+    }
+    .q-arrow:hover{border-color:var(--p);color:var(--p);}
+
+    /* ── PRICING ── */
+    #pricing{padding:130px 48px;}
+    .pricing-header{margin-bottom:72px;}
+    .pricing-header h2{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(1.8rem,3vw,2.6rem);
+      font-weight:700;letter-spacing:-.04em;margin-bottom:10px;
+    }
+    .pricing-header p{font-size:.88rem;color:var(--muted);max-width:480px;line-height:1.7;}
+    .pricing-eyebrow{
+      font-size:.68rem;font-weight:700;letter-spacing:.12em;
+      text-transform:uppercase;color:var(--p);margin-bottom:14px;
+    }
+
+    /* Pricing service blocks */
+    .p-block{
+      border:1px solid var(--b);border-radius:16px;
+      margin-bottom:20px;overflow:hidden;
+    }
+    .p-block-head{
+      display:grid;grid-template-columns:56px 1fr auto;
+      align-items:center;gap:24px;
+      padding:28px 32px;
+      border-bottom:1px solid var(--b);
+      background:var(--card);
+    }
+    .p-block-icon{
+      width:44px;height:44px;border-radius:11px;
+      background:rgba(255,101,0,.08);
+      border:1px solid rgba(255,101,0,.18);
+      display:flex;align-items:center;justify-content:center;
+      font-size:19px;
+    }
+    .p-block-title{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:1.15rem;font-weight:700;
+      letter-spacing:-.03em;margin-bottom:3px;
+    }
+    .p-block-sub{font-size:.78rem;color:var(--muted);}
+    .p-block-badge{
+      font-size:.68rem;font-weight:700;
+      letter-spacing:.06em;text-transform:uppercase;
+      border:1px solid var(--b2);
+      padding:5px 12px;border-radius:50px;color:var(--muted);
+      white-space:nowrap;
+    }
+    .p-block-body{padding:32px;}
+
+    /* Infra pricing */
+    .infra-p-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:24px;}
+    .p-domain-card{
+      background:var(--card2);border:1px solid var(--b);
+      border-radius:12px;padding:28px;position:relative;overflow:hidden;
+    }
+    .p-domain-card::before{
+      content:'';position:absolute;top:-1px;left:-1px;right:-1px;
+      height:2px;background:linear-gradient(90deg,var(--p),var(--gold));
+    }
+    .pdc-price{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:3.5rem;font-weight:700;letter-spacing:-.05em;line-height:1;
+      background:linear-gradient(135deg,var(--p),var(--gold));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .pdc-unit{font-size:.84rem;color:var(--muted);margin:6px 0 4px;}
+    .pdc-sends{font-size:.76rem;color:var(--dim);margin-bottom:22px;}
+    .pdc-rows{
+      background:rgba(255,101,0,.04);border:1px solid rgba(255,101,0,.1);
+      border-radius:8px;overflow:hidden;margin-bottom:22px;
+    }
+    .pdc-row{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.04);
+      font-size:.76rem;
+    }
+    .pdc-row:last-child{border-bottom:none;}
+    .pdc-row span:first-child{color:var(--muted);}
+    .pdc-row span:last-child{color:#EDEDEF;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:.74rem;}
+
+    /* Slider */
+    .slider-card{
+      background:var(--card2);border:1px solid var(--b);
+      border-radius:12px;padding:28px;
+    }
+    .slider-top{
+      display:flex;justify-content:space-between;
+      align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:12px;
+    }
+    .s-vol-lbl{font-size:.7rem;color:var(--dim);margin-bottom:5px;}
+    .s-vol{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:2rem;font-weight:700;letter-spacing:-.04em;
+    }
+    .s-price-lbl{font-size:.7rem;color:var(--dim);margin-bottom:5px;text-align:right;}
+    .s-price-row{display:flex;align-items:baseline;justify-content:flex-end;gap:4px;}
+    .s-price{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:2rem;font-weight:700;letter-spacing:-.04em;
+      background:linear-gradient(135deg,var(--p),var(--gold));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .s-period{font-size:.78rem;color:var(--muted);}
+    input[type=range]{
+      width:100%;-webkit-appearance:none;
+      height:5px;border-radius:3px;outline:none;
+      background:linear-gradient(90deg,var(--p) var(--fill,0%),rgba(255,101,0,.12) var(--fill,0%));
+      margin:6px 0 14px;cursor:pointer;
+    }
+    input[type=range]::-webkit-slider-thumb{
+      -webkit-appearance:none;width:20px;height:20px;
+      border-radius:50%;background:linear-gradient(135deg,var(--p),#CC5200);
+      border:3px solid var(--bg);box-shadow:0 0 10px rgba(255,101,0,.5);cursor:pointer;
+    }
+    .s-ticks{
+      display:flex;justify-content:space-between;
+      font-size:.62rem;color:var(--dim);margin-bottom:20px;
+      font-family:'JetBrains Mono',monospace;
+    }
+    .s-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+    .s-meta-item{
+      background:rgba(255,101,0,.04);border:1px solid rgba(255,101,0,.1);
+      border-radius:8px;padding:12px;
+    }
+    .smi-l{font-size:.66rem;color:var(--dim);margin-bottom:4px;}
+    .smi-v{font-size:1rem;font-weight:700;font-family:'JetBrains Mono',monospace;}
+
+    /* Lead gen models */
+    .lg-models{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .lg-card{
+      background:var(--card2);border:1px solid var(--b);
+      border-radius:12px;padding:28px;
+      display:flex;flex-direction:column;position:relative;overflow:hidden;
+    }
+    .lg-card.highlight{
+      border-color:rgba(255,101,0,.3);
+      background:linear-gradient(160deg,rgba(255,101,0,.07),var(--card2));
+    }
+    .lg-card.highlight::before{
+      content:'';position:absolute;top:-1px;left:-1px;right:-1px;
+      height:2px;background:linear-gradient(90deg,var(--p),var(--gold));
+    }
+    .lg-badge{
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:.68rem;font-weight:700;letter-spacing:.05em;
+      text-transform:uppercase;padding:4px 12px;border-radius:50px;
+      width:fit-content;margin-bottom:18px;
+    }
+    .badge-hi{background:rgba(255,101,0,.1);border:1px solid rgba(255,101,0,.25);color:var(--p2);}
+    .badge-lo{background:rgba(255,255,255,.04);border:1px solid var(--b2);color:var(--muted);}
+    .lg-card h3{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:1.25rem;font-weight:700;letter-spacing:-.03em;
+      margin-bottom:10px;line-height:1.25;
+    }
+    .lg-card p{font-size:.84rem;color:var(--muted);line-height:1.65;margin-bottom:20px;}
+    .lg-sep{height:1px;background:var(--b);margin:16px 0;}
+    .lg-model-row{
+      display:flex;justify-content:space-between;
+      font-size:.78rem;margin-bottom:8px;
+    }
+    .lg-model-row span:first-child{color:var(--muted);}
+    .lg-model-row span:last-child{color:#EDEDEF;font-weight:600;}
+    .lg-feats{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:24px;flex:1;}
+    .lg-feats li{
+      display:flex;align-items:flex-start;gap:9px;
+      font-size:.8rem;color:var(--muted);
+    }
+    .lg-feats li .chk{
+      width:16px;height:16px;border-radius:50%;flex-shrink:0;margin-top:1px;
+      background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.2);
+      display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:700;
+    }
+    .lg-note{
+      font-size:.74rem;color:var(--dim);padding:10px 13px;
+      background:rgba(255,255,255,.02);border:1px solid var(--b);
+      border-radius:7px;margin-bottom:18px;line-height:1.5;
+    }
+
+    /* Campaign pricing */
+    .cp-card{
+      background:var(--card2);border:1px solid var(--b);
+      border-radius:12px;padding:32px;
+      display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;
+    }
+    .cp-card h3{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:1.3rem;font-weight:700;letter-spacing:-.03em;margin-bottom:10px;
+    }
+    .cp-card p{font-size:.84rem;color:var(--muted);line-height:1.65;margin-bottom:22px;}
+    .cp-feats{list-style:none;display:flex;flex-direction:column;gap:8px;}
+    .cp-feats li{
+      display:flex;align-items:center;gap:9px;
+      font-size:.8rem;color:var(--muted);
+    }
+    .cp-feats li::before{content:'→';color:var(--p);font-size:.7rem;}
+    .cp-right{text-align:center;min-width:200px;}
+    .cp-from{font-size:.7rem;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+    .cp-price{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:3rem;font-weight:700;letter-spacing:-.05em;
+      background:linear-gradient(135deg,var(--p),var(--gold));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      line-height:1;margin-bottom:4px;
+    }
+    .cp-per{font-size:.82rem;color:var(--muted);margin-bottom:20px;}
+    .cp-note{font-size:.7rem;color:#8A8A96;margin-top:10px;line-height:1.5;}
+
+    /* ── FAQ ── */
+    #faq{
+      background:var(--bg2);
+      border-top:1px solid var(--b);
+      padding:130px 48px;
+    }
+    .faq-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:80px;align-items:start;}
+    .faq-left h2{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(1.8rem,3vw,2.6rem);
+      font-weight:700;letter-spacing:-.04em;margin-bottom:14px;
+    }
+    .faq-left p{font-size:.88rem;color:var(--muted);line-height:1.7;margin-bottom:28px;}
+    .faq-list{display:flex;flex-direction:column;gap:0;}
+    .faq-item{
+      border-bottom:1px solid var(--b);
+      transition:border-color .3s;
+    }
+    .faq-item.open{border-color:rgba(255,101,0,.25);}
+    .faq-q{
+      width:100%;background:none;border:none;
+      color:#EDEDEF;padding:20px 0;
+      text-align:left;font-size:.9rem;font-weight:600;
+      cursor:pointer;display:flex;align-items:center;
+      justify-content:space-between;gap:16px;
+      font-family:'Inter',sans-serif;transition:color .2s;
+    }
+    .faq-q:hover{color:var(--p2);}
+    .faq-arr{
+      font-size:1rem;color:var(--muted);
+      transition:transform .3s,color .2s;flex-shrink:0;
+    }
+    .faq-item.open .faq-arr{transform:rotate(180deg);color:var(--p);}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+    .faq-ai{padding:0 0 18px;font-size:.855rem;color:var(--muted);line-height:1.7;}
+
+    /* ── CTA ── */
+    #cta{padding:130px 48px;}
+    .cta-inner{
+      background:linear-gradient(135deg,rgba(255,101,0,.1),rgba(255,101,0,.03));
+      border:1px solid rgba(255,101,0,.22);
+      border-radius:20px;padding:90px 70px;
+      text-align:center;position:relative;overflow:hidden;
+    }
+    .cta-inner::before{
+      content:'';position:absolute;
+      top:-1px;left:-1px;right:-1px;height:2px;
+      background:linear-gradient(90deg,transparent,var(--p),var(--gold),var(--p),transparent);
+    }
+    .cta-inner h2{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(2.2rem,4.5vw,4rem);
+      font-weight:700;letter-spacing:-.05em;
+      max-width:720px;margin:0 auto 18px;line-height:1.08;
+    }
+    .cta-inner h2 em{font-style:italic;font-weight:300;color:var(--p);}
+    .cta-inner p{font-size:.95rem;color:var(--muted);max-width:440px;margin:0 auto 36px;line-height:1.7;}
+    .cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+    .cta-note{margin-top:18px;font-size:.74rem;color:var(--dim);}
+
+    /* ── FOOTER ── */
+    footer{
+      border-top:1px solid var(--b);
+      padding:64px 48px 40px;
+    }
+    .footer-grid{
+      display:grid;
+      grid-template-columns:2fr 1fr 1fr 1fr 1fr;
+      gap:40px;margin-bottom:52px;
+    }
+    .footer-brand .logo{margin-bottom:16px;}
+    .footer-brand p{font-size:.82rem;color:var(--muted);line-height:1.7;margin-bottom:22px;max-width:260px;}
+    .socials{display:flex;gap:8px;}
+    .social{
+      width:32px;height:32px;border:1px solid var(--b);
+      border-radius:7px;display:flex;align-items:center;justify-content:center;
+      font-size:13px;color:var(--muted);text-decoration:none;transition:all .2s;
+    }
+    .social:hover{border-color:var(--p);color:var(--p2);background:rgba(255,101,0,.08);}
+    .f-col h5{
+      font-size:.7rem;font-weight:700;letter-spacing:.1em;
+      text-transform:uppercase;color:var(--dim);margin-bottom:18px;
+    }
+    .f-col ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+    .f-col ul li a{font-size:.82rem;color:var(--muted);text-decoration:none;transition:color .2s;}
+    .f-col ul li a:hover{color:#EDEDEF;}
+    .f-col ul li a.hi{color:var(--p2);}
+    .footer-bottom{
+      display:flex;align-items:center;justify-content:space-between;
+      padding-top:28px;border-top:1px solid var(--b);
+      flex-wrap:wrap;gap:12px;
+    }
+    .footer-bottom p{font-size:.76rem;color:var(--dim);}
+    .f-legal{display:flex;gap:20px;}
+    .f-legal a{font-size:.76rem;color:var(--dim);text-decoration:none;transition:color .2s;}
+    .f-legal a:hover{color:var(--muted);}
+
+    /* ── HERO TRUST STRIP ── */
+    .hero-trust{
+      display:flex;align-items:center;gap:18px;
+      font-size:.75rem;color:var(--muted);
+      flex-wrap:wrap;margin-bottom:0;
+    }
+    .hero-trust span{display:flex;align-items:center;gap:5px;}
+    .hero-trust .ht-sep{color:var(--dim);font-size:.6rem;}
+    .ht-hi{color:var(--green);font-weight:600;}
+
+    /* ── PROOF WALL ── */
+    #proofwall{
+      padding:90px 48px;
+      border-top:1px solid var(--b);
+    }
+    .pw-top{
+      display:flex;align-items:flex-end;
+      justify-content:space-between;
+      margin-bottom:36px;flex-wrap:wrap;gap:16px;
+    }
+    .pw-top h2{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(1.4rem,2.5vw,2rem);
+      font-weight:700;letter-spacing:-.03em;
+      margin-bottom:6px;
+    }
+    .pw-top p{font-size:.84rem;color:var(--muted);max-width:340px;line-height:1.6;}
+    .pw-grid{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:12px;
+    }
+    .pw-img{
+      aspect-ratio:4/3;
+      background:var(--card);
+      border:1px dashed rgba(255,255,255,.1);
+      border-radius:10px;
+      display:flex;flex-direction:column;
+      align-items:center;justify-content:center;
+      gap:6px;overflow:hidden;
+      transition:border-color .3s,transform .2s;
+      cursor:pointer;
+    }
+    .pw-img:hover{border-color:rgba(255,101,0,.35);transform:translateY(-2px);}
+    .pw-img img{width:100%;height:100%;object-fit:cover;border-radius:10px;display:block;}
+    .pw-ph{font-size:.65rem;color:var(--dim);text-align:center;line-height:1.6;padding:10px;}
+    .pw-ph-icon{font-size:1.4rem;}
+    @media(max-width:1100px){
+      .pw-grid{grid-template-columns:repeat(3,1fr);}
+      #proofwall{padding:72px 32px;}
+    }
+    @media(max-width:640px){
+      .pw-grid{grid-template-columns:repeat(2,1fr);}
+      #proofwall{padding:60px 20px;}
+    }
+
+    /* ── LIGHTBOX ── */
+    .lightbox-overlay{
+      display:none;position:fixed;inset:0;z-index:9998;
+      background:rgba(0,0,0,0.92);
+      align-items:center;justify-content:center;
+      cursor:zoom-out;
+    }
+    .lightbox-overlay.open{display:flex;}
+    .lightbox-overlay img{
+      max-width:90vw;max-height:90vh;
+      border-radius:10px;
+      box-shadow:0 32px 80px rgba(0,0,0,.8);
+      pointer-events:none;
+    }
+    .lightbox-close{
+      position:absolute;top:20px;right:28px;
+      font-size:2rem;color:#EDEDEF;cursor:pointer;
+      line-height:1;opacity:.7;transition:opacity .2s;
+    }
+    .lightbox-close:hover{opacity:1;}
+    .pw-img{cursor:zoom-in;}
+
+    /* ── UTILS ── */
+    .btn-lg2{padding:14px 32px;font-size:.9rem;border-radius:9px;}
+    .fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+    .fade-up.in{opacity:1;transform:none;}
+    .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
+    .d4{transition-delay:.32s}.d5{transition-delay:.40s}
+
+    /* ── HAMBURGER ── */
+    .hamburger{
+      display:none;
+      background:none;border:1px solid var(--b2);
+      color:#EDEDEF;border-radius:8px;
+      padding:7px 10px;cursor:pointer;font-size:1.1rem;
+      line-height:1;
+    }
+    .mobile-menu{
+      display:none;
+      position:fixed;top:64px;left:0;right:0;z-index:499;
+      background:rgba(5,5,10,0.97);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--b);
+      padding:20px 24px 28px;
+      flex-direction:column;gap:0;
+    }
+    .mobile-menu.open{display:flex;}
+    .mobile-menu a{
+      font-size:1rem;font-weight:500;
+      color:#EDEDEF;text-decoration:none;
+      padding:13px 0;
+      border-bottom:1px solid var(--b);
+    }
+    .mobile-menu a:last-child{border-bottom:none;}
+    .mobile-menu .mob-cta{
+      margin-top:16px;
+      background:var(--p);color:#000;font-weight:700;
+      border-radius:50px;padding:12px 24px;
+      text-align:center;border-bottom:none;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1100px){
+      #hero{grid-template-columns:1fr;padding:120px 32px 80px;}
+      .hero-right{display:none;}
+      #manifesto{grid-template-columns:1fr;padding:80px 32px;}
+      .manifesto-label{writing-mode:horizontal-tb;transform:none;margin-bottom:8px;}
+      .numbers-grid{grid-template-columns:repeat(2,1fr);gap:32px;}
+      .num-item{padding:0;border-right:none;border-bottom:1px solid var(--b);}
+      .num-item:nth-child(3),.num-item:nth-child(4){border-bottom:none;}
+      .process-steps{grid-template-columns:repeat(3,1fr);gap:40px 0;}
+      .process-steps::before{display:none;}
+      .cases-grid,.infra-grid,.faq-grid{grid-template-columns:1fr;}
+      .infra-p-grid,.lg-models{grid-template-columns:1fr;}
+      .cp-card{grid-template-columns:1fr;}
+      .cp-right{text-align:left;}
+      nav{padding:0 24px;}
+      #services,#cases,#infra,#process,#numbers,#videos,#quotes,#pricing,#faq,#cta{padding-left:32px;padding-right:32px;}
+      footer{padding:48px 32px 32px;}
+      .footer-grid{grid-template-columns:1fr 1fr;gap:32px;}
+    }
+    @media(max-width:640px){
+      /* Nav */
+      nav{padding:0 20px;}
+      nav .nav-mid{display:none;}
+      nav .nav-r{display:none;}
+      .hamburger{display:block;}
+
+      /* Hero */
+      #hero{padding:100px 20px 60px;}
+      .hero-h1{font-size:clamp(2.2rem,9vw,3.2rem);}
+      .hero-btns{flex-direction:column;align-items:flex-start;gap:10px;}
+      .hero-btns .btn{width:100%;justify-content:center;}
+      .hero-eyebrow{font-size:.75rem;}
+
+      /* Sections */
+      #services,#cases,#infra,#process,#numbers,#videos,#quotes,#pricing,#faq,#cta{
+        padding-left:20px;padding-right:20px;
+      }
+
+      /* Numbers */
+      .numbers-grid{grid-template-columns:1fr 1fr;gap:24px;}
+      .num-val{font-size:2.2rem;}
+
+      /* Process — fix overlap */
+      .process-steps{grid-template-columns:1fr 1fr;gap:36px 20px;}
+
+      /* Cases */
+      .cases-grid{grid-template-columns:1fr;}
+      .case-nums{gap:16px;}
+      .case-num-val{font-size:1.3rem;}
+
+      /* Proof wall */
+      .pw-grid{grid-template-columns:1fr !important;}
+      .pw-img{min-height:180px;}
+
+      /* Videos */
+      .vid-grid{grid-template-columns:1fr;}
+      .vid-thumb{height:200px;}
+
+      /* Quotes */
+      .q-card{min-width:280px;}
+
+      /* Pricing */
+      .infra-p-grid,.lg-models{grid-template-columns:1fr;}
+      .cp-card{grid-template-columns:1fr;}
+      .cp-right{text-align:left;}
+      .p-block-head{flex-wrap:wrap;gap:10px;}
+
+      /* Manifesto */
+      #manifesto{padding:64px 20px;}
+      .manifesto-cols{grid-template-columns:1fr;}
+
+      /* CTA */
+      .cta-inner{padding:52px 20px;}
+      .cta-btns{flex-direction:column;gap:10px;}
+      .cta-btns .btn{width:100%;justify-content:center;}
+
+      /* Footer */
+      footer{padding:40px 20px 28px;}
+      .footer-grid{grid-template-columns:1fr;}
+      .s-meta{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="logo">
+    <div class="logo-mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 2L11 13" stroke="#FF6500" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="#FF6500" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>chill<span class="hi">reach.ai</span></span>
+  </a>
+  <ul class="nav-mid">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#cases">Results</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="team.html">Team</a></li>
+  </ul>
+  <div class="nav-r">
+    <a href="#faq" class="btn btn-g">FAQ</a>
+    <a href="https://cal.com/malyakula-saivamsi-gepsvn/deliveribility-audit" target="_blank" class="btn btn-o">Book a Call →</a>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#services" onclick="closeMobileMenu()">Services</a>
+  <a href="#process" onclick="closeMobileMenu()">Process</a>
+  <a href="#cases" onclick="closeMobileMenu()">Results</a>
+  <a href="#pricing" onclick="closeMobileMenu()">Pricing</a>
+  <a href="#faq" onclick="closeMobileMenu()">FAQ</a>
+  <a href="team.html" onclick="closeMobileMenu()">Team</a>
+  <a href="https://cal.com/malyakula-saivamsi-gepsvn/deliveribility-audit" target="_blank" class="mob-cta" onclick="closeMobileMenu()">Book a Call →</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="dots"></canvas>
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <span class="live-dot"></span>
+      <span class="eyebrow-text">Taking on new clients — 3 slots open</span>
+    </div>
+    <h1 class="hero-h1">
+      Cold email<br/>
+      that <em>actually</em><br/>
+      converts.
+    </h1>
+    <p class="hero-sub">
+      We build the infrastructure, find the leads, write the sequences,
+      and run the campaigns. <strong>You just show up to calls.</strong>
+    </p>
+    <div class="hero-btns">
+      <a href="https://cal.com/malyakula-saivamsi-gepsvn/deliveribility-audit" target="_blank" class="btn btn-o btn-xl">Get a Free Audit →</a>
+      <a href="#cases" class="btn btn-g btn-xl">See Results</a>
+    </div>
+    <div class="hero-trust">
+      <span><span class="ht-hi">✓</span> Results guarantee or we work free</span>
+      <span class="ht-sep">✦</span>
+      <span><span class="ht-hi">✓</span> $100 / meeting booked</span>
+      <span class="ht-sep">✦</span>
+      <span><span class="ht-hi">✓</span> Infra included</span>
+    </div>
+    <div class="hero-proof" style="margin-top:20px;">
+      <div class="proof-avatars">
+        <div class="proof-av av1">JM</div>
+        <div class="proof-av av2">SK</div>
+        <div class="proof-av av3">RL</div>
+        <div class="proof-av av4">AM</div>
+      </div>
+      &nbsp;Trusted by 10+ B2B teams · 8 of 10 clients renewed after year one
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="stats-widget">
+      <div class="sw-header">
+        <span class="sw-title">campaign_dashboard.live</span>
+        <div class="sw-status"><span class="sw-dot"></span>LIVE</div>
+      </div>
+      <div class="sw-body">
+        <div class="sw-row">
+          <span class="sw-label">Emails sent today</span>
+          <span class="sw-val orange">4,218</span>
+        </div>
+        <div class="sw-row">
+          <span class="sw-label">Open rate</span>
+          <span class="sw-val">38.2%</span>
+        </div>
+        <div class="sw-row">
+          <span class="sw-label">Reply rate</span>
+          <span class="sw-val green">4.5%</span>
+        </div>
+        <div class="sw-row">
+          <span class="sw-label">Meetings booked</span>
+          <span class="sw-val green">12 ↑</span>
+        </div>
+        <div class="sw-row">
+          <span class="sw-label">Inbox placement</span>
+          <span class="sw-val green">97.2%</span>
+        </div>
+        <div class="sw-row">
+          <span class="sw-label">Active domains</span>
+          <span class="sw-val">3 healthy</span>
+        </div>
+        <div class="sw-bar-wrap">
+          <div class="sw-bar-label"><span>Deliverability health</span><span>97%</span></div>
+          <div class="sw-bar-bg"><div class="sw-bar-fill fill-green" style="width:97%"></div></div>
+        </div>
+        <div class="sw-bar-wrap" style="margin-top:12px;">
+          <div class="sw-bar-label"><span>This week vs last</span><span>+18%</span></div>
+          <div class="sw-bar-bg"><div class="sw-bar-fill fill-orange" style="width:72%"></div></div>
+        </div>
+        <div class="sw-footer">Updated 12s ago · chillreach.ai</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div id="ticker">
+  <div class="ticker-track">
+    <span class="tick-item">14M+ Emails Delivered<span class="tick-sep">✦</span></span>
+    <span class="tick-item">9,400+ Meetings Booked<span class="tick-sep">✦</span></span>
+    <span class="tick-item">4.8% Average Reply Rate<span class="tick-sep">✦</span></span>
+    <span class="tick-item">97% Inbox Placement<span class="tick-sep">✦</span></span>
+    <span class="tick-item">38+ Countries<span class="tick-sep">✦</span></span>
+    <span class="tick-item">Zero Domain Burns<span class="tick-sep">✦</span></span>
+    <span class="tick-item">$24/Domain Infrastructure<span class="tick-sep">✦</span></span>
+    <span class="tick-item">14M+ Emails Delivered<span class="tick-sep">✦</span></span>
+    <span class="tick-item">9,400+ Meetings Booked<span class="tick-sep">✦</span></span>
+    <span class="tick-item">4.8% Average Reply Rate<span class="tick-sep">✦</span></span>
+    <span class="tick-item">97% Inbox Placement<span class="tick-sep">✦</span></span>
+    <span class="tick-item">38+ Countries<span class="tick-sep">✦</span></span>
+    <span class="tick-item">Zero Domain Burns<span class="tick-sep">✦</span></span>
+    <span class="tick-item">$24/Domain Infrastructure<span class="tick-sep">✦</span></span>
+  </div>
+</div>
+
+<!-- MANIFESTO -->
+<section id="manifesto">
+  <div class="manifesto-label">Why us</div>
+  <div class="manifesto-body">
+    <h2>
+      Most outbound fails because<br/>
+      teams are doing <mark>5 jobs at once.</mark><br/>
+      We do one.
+    </h2>
+    <div class="manifesto-cols">
+      <div class="manifesto-col">
+        <p>Your team shouldn't be managing domain warm-up schedules, scrubbing lead lists, A/B testing subject lines, and chasing replies — all while trying to close deals. <strong>That's four jobs none of them were hired to do.</strong></p>
+      </div>
+      <div class="manifesto-col">
+        <p>We run the entire outbound motion end-to-end — infrastructure, research, copy, execution. Every service billed separately, so you only pay for what you need. <strong>No bloated retainers. No fluff.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-top">
+    <h2>What we do</h2>
+    <p class="services-note">Each service billed independently. Use one, two, or all three.</p>
+  </div>
+  <div class="svc-list">
+
+    <!-- Service 1 -->
+    <div class="svc-row" onclick="toggleSvc(this)">
+      <div class="svc-head">
+        <span class="svc-num">01</span>
+        <span class="svc-name">Email Infrastructure</span>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="svc-tag">$24 / domain</span>
+          <span class="svc-arrow">+</span>
+        </div>
+      </div>
+      <div class="svc-body">
+        <div class="svc-body-inner">
+          <div></div>
+          <div class="svc-desc">
+            <p>The foundation everything else runs on. We acquire sending domains, configure DNS records (SPF, DKIM, DMARC), run automated warm-up protocols, and manage a rotating sending pool — so your emails land in primary inboxes every time.</p>
+            <p>Your main brand domain is never touched. We operate on dedicated sending infrastructure that's completely isolated and monitored 24/7.</p>
+            <ul class="svc-feats">
+              <li>Domain acquisition + full DNS configuration</li>
+              <li>SPF, DKIM, DMARC setup and verification</li>
+              <li>4–6 week automated warm-up protocol</li>
+              <li>Sending pool rotation across multiple domains</li>
+              <li>24/7 blacklist monitoring and remediation</li>
+              <li>97%+ inbox placement guaranteed</li>
+            </ul>
+          </div>
+          <div class="svc-cta-wrap">
+            <div class="svc-price-tag">$24 / domain / month<br/>4,000 sends included<br/>Scale by adding domains</div>
+            <a href="#pricing" class="btn btn-o" style="border-radius:8px;">See pricing calculator →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Service 2 -->
+    <div class="svc-row" onclick="toggleSvc(this)">
+      <div class="svc-head">
+        <span class="svc-num">02</span>
+        <span class="svc-name">Lead Generation</span>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="svc-tag">DFY & DWY models</span>
+          <span class="svc-arrow">+</span>
+        </div>
+      </div>
+      <div class="svc-body">
+        <div class="svc-body-inner">
+          <div></div>
+          <div class="svc-desc">
+            <p>Forget buying stale lists from data brokers. We build verified, intent-matched prospect databases tailored exactly to your ICP — using multi-source research, LinkedIn signal analysis, and real-time email verification.</p>
+            <p>Two models: <strong>Done For You</strong> (we build it, you receive leads, charged per lead) or <strong>Done With You</strong> (you stay in control of targeting, we execute, charged per prospect contacted).</p>
+            <ul class="svc-feats">
+              <li>Deep ICP definition and persona mapping</li>
+              <li>Multi-source data enrichment (97%+ email accuracy)</li>
+              <li>Job title, company size, tech stack, intent filters</li>
+              <li>LinkedIn buying signal overlays</li>
+              <li>CRM-ready delivery in any format</li>
+            </ul>
+          </div>
+          <div class="svc-cta-wrap">
+            <div class="svc-price-tag">DFY: base setup + per lead<br/>DWY: per prospect contacted<br/>Both scoped on a call</div>
+            <a href="https://cal.com/malyakula-saivamsi-gepsvn/15min" target="_blank" class="btn btn-o" style="border-radius:8px;">Book a call →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Service 3 -->
+    <div class="svc-row" onclick="toggleSvc(this)">
+      <div class="svc-head">
+        <span class="svc-num">03</span>
+        <span class="svc-name">Done-For-You Campaigns</span>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="svc-tag">Full service</span>
+          <span class="svc-arrow">+</span>
+        </div>
+      </div>
+      <div class="svc-body">
+        <div class="svc-body-inner">
+          <div></div>
+          <div class="svc-desc">
+            <p>The full package. We run your entire outbound motion — ICP research, lead list building, copywriting, sending, A/B testing, reply management, and calendar booking. You just take the calls.</p>
+            <p>Campaigns go live within 5 business days. Everything is included — infrastructure, leads, copy, sending, and reply management. No hidden domain fees, no extras. Flat $400 to start, then $100 per meeting booked.</p>
+            <ul class="svc-feats">
+              <li>ICP mapping and precision lead research</li>
+              <li>Multi-step personalized sequences (no templates)</li>
+              <li>A/B testing on subject lines, copy, and CTAs</li>
+              <li>Reply handling and calendar booking</li>
+              <li>Weekly performance reports and strategy calls</li>
+              <li>Results guarantee — or we work free</li>
+            </ul>
+          </div>
+          <div class="svc-cta-wrap">
+            <div class="svc-price-tag">Custom scoped per engagement<br/>Live in 5 business days<br/>Infra billed separately</div>
+            <a href="https://cal.com/malyakula-saivamsi-gepsvn/deliveribility-audit" target="_blank" class="btn btn-o" style="border-radius:8px;">Book a call →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<div id="numbers">
+  <div class="numbers-grid">
+    <div class="num-item fade-up">
+      <div class="num-val" data-target="1" data-suffix="M+">1M+</div>
+      <div class="num-label">Emails sent</div>
+      <div class="num-sub">Across all clients, 2023–2024</div>
+    </div>
+    <div class="num-item fade-up d1">
+      <div class="num-val" data-target="10" data-suffix="+">10+</div>
+      <div class="num-label">Clients retained</div>
+      <div class="num-sub">Most stayed 12+ months</div>
+    </div>
+    <div class="num-item fade-up d2">
+      <div class="num-val" data-target="3" data-suffix="%+">3%+</div>
+      <div class="num-label">Reply rates delivered</div>
+      <div class="num-sub">Even in cold, difficult niches</div>
+    </div>
+    <div class="num-item fade-up d3">
+      <div class="num-val" data-target="97" data-suffix="%">97%</div>
+      <div class="num-label">Inbox placement</div>
+      <div class="num-sub">Primary inbox, every time</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="process-top">
+    <h2>How it works</h2>
+    <p>Live in 5 days. Booked calls within 2 weeks. Every time.</p>
+  </div>
+  <div class="process-steps">
+    <div class="p-step fade-up">
+      <div class="p-num">01</div>
+      <h4>Strategy Call</h4>
+      <p>Map your ICP, value props, and target market. Define the campaign blueprint together.</p>
+    </div>
+    <div class="p-step fade-up d1">
+      <div class="p-num">02</div>
+      <h4>Infrastructure</h4>
+      <p>Domain acquisition, DNS config, warm-up, and ESP integration. All handled.</p>
+    </div>
+    <div class="p-step fade-up d2">
+      <div class="p-num">03</div>
+      <h4>Lead Research</h4>
+      <p>Hyper-targeted verified prospect list built to your exact buyer profile.</p>
+    </div>
+    <div class="p-step fade-up d3">
+      <div class="p-num">04</div>
+      <h4>Copywriting</h4>
+      <p>Personalized sequences by our outbound specialists. No generic templates.</p>
+    </div>
+    <div class="p-step fade-up d4">
+      <div class="p-num">05</div>
+      <h4>Campaign Launch</h4>
+      <p>Go live with monitored sending, reply detection, and automated follow-ups.</p>
+    </div>
+    <div class="p-step fade-up d5">
+      <div class="p-num">06</div>
+      <h4>Scale</h4>
+      <p>Weekly reviews, A/B tests, volume scaling. Results compound over time.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES -->
+<section id="cases">
+  <div class="cases-top">
+    <h2>Real results,<br/>real numbers.</h2>
+    <a href="#cta" class="btn btn-g">All case studies →</a>
+  </div>
+  <div class="cases-grid">
+    <div class="case-card fade-up">
+      <div class="case-industry">Consumer Goods / Enterprise</div>
+      <div class="case-co">Enterprise F&B Client</div>
+      <div class="case-desc">Full DFY outbound motion — ICP mapping, lead sourcing, sequences, and reply management. Consistently hitting 50K+ qualified leads contacted per month.</div>
+      <div class="case-nums">
+        <div><div class="case-num-val">50K+</div><div class="case-num-lbl">Leads / month</div></div>
+        <div><div class="case-num-val">100+</div><div class="case-num-lbl">Meetings / month</div></div>
+        <div><div class="case-num-val">97%</div><div class="case-num-lbl">Inbox rate</div></div>
+        <div><div class="case-num-val">12mo+</div><div class="case-num-lbl">Engagement</div></div>
+      </div>
+    </div>
+    <div class="case-card fade-up d1">
+      <div class="case-industry">SaaS / Fintech</div>
+      <div class="case-co">Glyde</div>
+      <div class="case-desc">Running our full email infrastructure stack. Dedicated sending domains, automated warm-up, and blacklist monitoring — 30 booked calls every single month.</div>
+      <div class="case-nums">
+        <div><div class="case-num-val">30</div><div class="case-num-lbl">Calls booked / mo</div></div>
+        <div><div class="case-num-val">97%</div><div class="case-num-lbl">Inbox placement</div></div>
+        <div><div class="case-num-val">0</div><div class="case-num-lbl">Domain burns</div></div>
+        <div><div class="case-num-val">$24</div><div class="case-num-lbl">Per domain / mo</div></div>
+      </div>
+    </div>
+    <div class="case-card fade-up d2">
+      <div class="case-industry">Fintech / Credit Cards</div>
+      <div class="case-co">Bluechain</div>
+      <div class="case-desc">Running our full email infrastructure stack. Dedicated sending domains, warm-up, and continuous blacklist monitoring keeping their outbound clean and consistent.</div>
+      <div class="case-nums">
+        <div><div class="case-num-val">97%</div><div class="case-num-lbl">Inbox placement</div></div>
+        <div><div class="case-num-val">0</div><div class="case-num-lbl">Domain burns</div></div>
+        <div><div class="case-num-val">$24</div><div class="case-num-lbl">Per domain / mo</div></div>
+        <div><div class="case-num-val">Infra</div><div class="case-num-lbl">Service type</div></div>
+      </div>
+    </div>
+    <div class="case-card fade-up d3">
+      <div class="case-industry">Tech / Outbound</div>
+      <div class="case-co">Ninternet</div>
+      <div class="case-desc">Full DFY campaign with precision ICP targeting. Consistently delivering reply rates between 2–6% — well above industry average — across their outbound sequences.</div>
+      <div class="case-nums">
+        <div><div class="case-num-val">2–6%</div><div class="case-num-lbl">Reply rate</div></div>
+        <div><div class="case-num-val">97%</div><div class="case-num-lbl">Inbox rate</div></div>
+        <div><div class="case-num-val">100%</div><div class="case-num-lbl">Verified lists</div></div>
+        <div><div class="case-num-val">DFY</div><div class="case-num-lbl">Service type</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INFRA -->
+<section id="infra">
+  <div class="infra-grid">
+    <div class="infra-left fade-up">
+      <h2>Your sending engine,<br/>built to last.</h2>
+      <p>Most cold email fails before a word is written. Deliverability is a technical problem — and we solve it completely. $24/domain, 4,000 sends included. Scale by adding domains.</p>
+      <div class="infra-feats">
+        <div class="i-feat">
+          <div class="i-feat-icon">🌐</div>
+          <div><h4>Domain Setup & DNS Hardening</h4><p>SPF, DKIM, DMARC, and MX configured exactly to spec. Every time.</p></div>
+        </div>
+        <div class="i-feat">
+          <div class="i-feat-icon">🔥</div>
+          <div><h4>Automated Warm-Up Protocol</h4><p>Human-pattern inbox warming over 4–6 weeks before any campaign volume.</p></div>
+        </div>
+        <div class="i-feat">
+          <div class="i-feat-icon">🔄</div>
+          <div><h4>Sending Pool Rotation</h4><p>Multiple domains rotating to protect reputation and scale volume safely.</p></div>
+        </div>
+        <div class="i-feat">
+          <div class="i-feat-icon">🛡️</div>
+          <div><h4>24/7 Blacklist Monitoring</h4><p>Instant alerts and same-day remediation if any domain hits a blocklist.</p></div>
+        </div>
+      </div>
+      <div class="infra-badges" style="margin-top:24px;">
+        <span class="i-badge">✓ 97% inbox rate</span>
+        <span class="i-badge">✓ Zero domain burns</span>
+        <span class="i-badge">✓ $24/domain</span>
+        <span class="i-badge">✓ 4K sends/domain/mo</span>
+      </div>
+    </div>
+    <div class="fade-up d2">
+      <div class="terminal">
+        <div class="t-bar">
+          <div class="t-d t-r"></div><div class="t-d t-y"></div><div class="t-d t-g"></div>
+          <span class="t-ttl">chillreach-infra — bash</span>
+        </div>
+        <div class="t-body">
+          <span class="tc"># Infrastructure health check</span><br/><br/>
+          <span class="tk">$ cr status --all</span><br/>
+          <span class="tv">✓ send-1.yourbrand.io  HEALTHY</span><br/>
+          <span class="tv">✓ send-2.yourbrand.io  HEALTHY</span><br/>
+          <span class="tv">✓ send-3.yourbrand.io  HEALTHY</span><br/><br/>
+          <span class="tk">$ cr deliverability --check</span><br/>
+          <span class="ti">→ SPF    PASS ✓</span><br/>
+          <span class="ti">→ DKIM   PASS ✓</span><br/>
+          <span class="ti">→ DMARC  PASS ✓</span><br/>
+          <span class="ti">→ Inbox  97.2%</span><br/><br/>
+          <span class="tk">$ cr billing --summary</span><br/>
+          <span class="tv">3 domains × $24 = $72/mo</span><br/>
+          <span class="tv">Capacity: 12,000 sends/mo</span><br/>
+          <span class="tv">Cost per send: $0.006</span><br/><br/>
+          <span class="tk">$ cr today --stats</span><br/>
+          <span class="tv">Sent:    4,218 ✓</span><br/>
+          <span class="tv">Opens:   1,603  (38%)</span><br/>
+          <span class="tv">Replies: 189 meetings: 12 ↑</span><br/><br/>
+          <span class="tk">$ <span class="t-cur"></span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO TESTIMONIALS -->
+<section id="videos">
+  <div class="vid-top">
+    <h2>Hear it from<br/>our clients.</h2>
+    <p>Real results, real people. Watch what chillreach.ai delivered for them.</p>
+  </div>
+  <div class="vid-grid" style="grid-template-columns:repeat(2,1fr);max-width:860px;">
+
+    <!-- VIDEO 1 — Hollis Cameron -->
+    <div class="vid-card fade-up">
+      <div class="vid-thumb">
+        <iframe src="https://drive.google.com/file/d/1Am7kk0EX82Zegz-7BcQqDWMYRx2Jbt-W/preview" allowfullscreen allow="autoplay" style="width:100%;height:100%;border:0;"></iframe>
+      </div>
+      <div class="vid-info">
+        <div class="vid-name">Hollis Cameron</div>
+        <div class="vid-role">CEO, Action Hero Marketing</div>
+        <div class="vid-quote">"Reliable and honest professionals in the difficult field of cold email — working with them for over two years."</div>
+      </div>
+    </div>
+
+    <div class="vid-card fade-up d1">
+      <div class="vid-thumb">
+        <iframe src="https://drive.google.com/file/d/1WBwANyPqTg4Wl3vhXpaGkawE5Hqnzy6N/preview" allowfullscreen allow="autoplay" style="width:100%;height:100%;border:0;"></iframe>
+      </div>
+      <div class="vid-info">
+        <div class="vid-name">Harry</div>
+        <div class="vid-role">CEO, Leadr Marketing</div>
+        <div class="vid-quote">"They do a fantastic job making sure our emails always land in the inbox — no matter what's going on with Gmail or Outlook. Game changer."</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROOF WALL — 10 client stat screenshots -->
+<section id="proofwall">
+  <div class="pw-top">
+    <div>
+      <h2>Real numbers from real clients.</h2>
+      <p>Screenshots pulled directly from live campaign dashboards.</p>
+    </div>
+  </div>
+  <div class="pw-grid" style="grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:16px;">
+
+    <div class="pw-img" onclick="openLightbox('stat1.png.jpeg')">
+      <img src="stat1.png.jpeg" alt="Campaign dashboard — 106,498 sent, 1,832 replies, 7.81% positive reply rate"/>
+    </div>
+    <div class="pw-img" onclick="openLightbox('stat2.png.jpeg')">
+      <img src="stat2.png.jpeg" alt="Active campaign — 356 contacts, 7.9% reply rate"/>
+    </div>
+    <div class="pw-img" onclick="openLightbox('stat3.png')">
+      <img src="stat3.png" alt="Campaign dashboard — 104,006 sent, 17.99% positive reply rate"/>
+    </div>
+
+  </div>
+</section>
+
+<!-- PULL QUOTES -->
+<section id="quotes">
+  <div class="quotes-label">What clients say</div>
+  <div class="quotes-track" id="quotesTrack">
+    <div class="q-card">
+      <div class="q-mark">"</div>
+      <div class="q-stars">★★★★★</div>
+      <div class="q-text">Reliable and honest professionals in the difficult field of cold email. I've been working with them for over two years and would give a personal reference to anyone considering it.</div>
+      <div class="q-author">
+        <div class="q-av qa1">HC</div>
+        <div><div class="q-name">Hollis Cameron</div><div class="q-role">CEO, Action Hero Marketing</div></div>
+      </div>
+    </div>
+    <div class="q-card">
+      <div class="q-mark">"</div>
+      <div class="q-stars">★★★★★</div>
+      <div class="q-text">Anyone who's tried to run outbound at scale knows how insanely difficult it is to consistently land in inboxes. They do a fantastic job — no matter what's going on with Gmail or Outlook. Game changer.</div>
+      <div class="q-author">
+        <div class="q-av qa2">H</div>
+        <div><div class="q-name">Harry</div><div class="q-role">CEO, Leadr Marketing</div></div>
+      </div>
+    </div>
+    <div class="q-card">
+      <div class="q-mark">"</div>
+      <div class="q-stars">★★★★★</div>
+      <div class="q-text">We'd burned through two agencies who couldn't keep our domains clean. chillreach.ai rebuilt our entire infrastructure from scratch. Zero burns since — 97% inbox placement, every single month.</div>
+      <div class="q-author">
+        <div class="q-av qa3">JT</div>
+        <div><div class="q-name">James Thorpe</div><div class="q-role">Head of Marketing, Bluechain</div></div>
+      </div>
+    </div>
+    <div class="q-card">
+      <div class="q-mark">"</div>
+      <div class="q-stars">★★★★★</div>
+      <div class="q-text">Reply rates consistently between 2–6%. That's double what we managed in-house. The sequences don't read like templates — prospects actually respond like it's a real conversation.</div>
+      <div class="q-author">
+        <div class="q-av qa4">RS</div>
+        <div><div class="q-name">Ravi Sandeep</div><div class="q-role">Co-founder & COO, Ninternet</div></div>
+      </div>
+    </div>
+    <div class="q-card">
+      <div class="q-mark">"</div>
+      <div class="q-stars">★★★★★</div>
+      <div class="q-text">Fully transparent weekly reports, constant A/B testing, never missed a beat. This isn't an agency — it feels like having a world-class outbound team embedded in-house.</div>
+      <div class="q-author">
+        <div class="q-av qa6">CP</div>
+        <div><div class="q-name">Claire Patel</div><div class="q-role">CEO, Hexelion Labs</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="quotes-nav">
+    <div class="q-arrow" onclick="scrollQuotes(-1)">←</div>
+    <div class="q-arrow" onclick="scrollQuotes(1)">→</div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="pricing-header">
+    <div class="pricing-eyebrow">Pricing</div>
+    <h2>Separate billing.<br/>Pay only for what you use.</h2>
+    <p>Each service is billed independently — no bundles, no lock-in. Mix and match based on your needs.</p>
+  </div>
+
+  <!-- Infra -->
+  <div class="p-block fade-up">
+    <div class="p-block-head">
+      <div class="p-block-icon">⚡</div>
+      <div><div class="p-block-title">Email Infrastructure</div><div class="p-block-sub">Billed per domain — scale with your sending volume</div></div>
+      <span class="p-block-badge">$24 / domain / mo</span>
+    </div>
+    <div class="p-block-body">
+      <div class="infra-p-grid">
+        <div class="p-domain-card">
+          <div class="pdc-price">$24</div>
+          <div class="pdc-unit">per domain / month</div>
+          <div class="pdc-sends">4,000 sends included per domain</div>
+          <div class="pdc-rows">
+            <div class="pdc-row"><span>DNS setup (SPF/DKIM/DMARC)</span><span>Included</span></div>
+            <div class="pdc-row"><span>Automated warm-up</span><span>Included</span></div>
+            <div class="pdc-row"><span>Blacklist monitoring</span><span>Included</span></div>
+            <div class="pdc-row"><span>Monthly capacity</span><span>4,000 sends</span></div>
+            <div class="pdc-row"><span>3 domains example</span><span>$72 · 12K sends</span></div>
+            <div class="pdc-row"><span>10 domains example</span><span>$240 · 40K sends</span></div>
+          </div>
+          <a href="https://cal.com/malyakula-saivamsi-gepsvn/deliveribility-audit" target="_blank" class="btn btn-o" style="border-radius:8px;width:100%;justify-content:center;">Get started →</a>
+        </div>
+        <div class="slider-card">
+          <div class="slider-top">
+            <div>
+              <div class="s-vol-lbl">Monthly sending volume</div>
+              <div class="s-vol" id="sVol">10,000</div>
+            </div>
+            <div>
+              <div class="s-price-lbl">Est. monthly cost</div>
+              <div class="s-price-row">
+                <div class="s-price" id="sPrice">$100</div>
+                <div class="s-period">/mo</div>
+              </div>
+            </div>
+          </div>
+          <input type="range" id="sl" min="0" max="9" value="0" step="1"/>
+          <div class="s-ticks">
+            <span>10K</span><span>25K</span><span>50K</span><span>75K</span><span>100K</span>
+            <span>125K</span><span>150K</span><span>175K</span><span>200K</span><span>250K+</span>
+          </div>
+          <div class="s-meta">
+            <div class="s-meta-item"><div class="smi-l">Domains needed</div><div class="smi-v" id="sDom">3</div></div>
+            <div class="s-meta-item"><div class="smi-l">Cost per send</div><div class="smi-v" id="sCps">$0.0100</div></div>
+            <div class="s-meta-item"><div class="smi-l">Per domain / mo</div><div class="smi-v" id="sDomCost">$24</div></div>
+            <div class="s-meta-item"><div class="smi-l">vs agency avg.</div><div class="smi-v" id="sSave">~60% less</div></div>
+          </div>
+          <a href="https://cal.com/malyakula-saivamsi-gepsvn/deliveribility-audit" target="_blank" class="btn btn-g" style="width:100%;justify-content:center;border-radius:8px;padding:12px;">Book a call to get started →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lead Gen -->
+  <div class="p-block fade-up d1">
+    <div class="p-block-head">
+      <div class="p-block-icon">🎯</div>
+      <div><div class="p-block-title">Lead Generation</div><div class="p-block-sub">Two engagement models — choose what fits your team</div></div>
+      <span class="p-block-badge">Book a call</span>
+    </div>
+    <div class="p-block-body">
+      <div class="lg-models">
+        <div class="lg-card highlight">
+          <div class="lg-badge badge-hi">⚡ Done For You</div>
+          <h3>We build it.<br/>You receive leads.</h3>
+          <p>Total hands-off. We handle ICP definition, data sourcing, enrichment, verification, and delivery. You receive ready-to-use verified prospect lists.</p>
+          <div class="lg-sep"></div>
+          <div class="lg-model-row"><span>Base setup</span><span>Custom</span></div>
+          <div class="lg-model-row"><span>Then charged</span><span>Per lead delivered</span></div>
+          <div class="lg-sep"></div>
+          <ul class="lg-feats">
+            <li><span class="chk">✓</span>Full ICP mapping and persona definition</li>
+            <li><span class="chk">✓</span>Multi-source research and enrichment</li>
+            <li><span class="chk">✓</span>97%+ email verification accuracy</li>
+            <li><span class="chk">✓</span>LinkedIn and intent signal overlays</li>
+            <li><span class="chk">✓</span>CRM-ready delivery in any format</li>
+          </ul>
+          <div class="lg-note">💡 Pricing depends on ICP complexity and volume. Scoped on the strategy call.</div>
+          <a href="https://cal.com/malyakula-saivamsi-gepsvn/15min" target="_blank" class="btn btn-o" style="border-radius:8px;justify-content:center;">Book a Call →</a>
+        </div>
+        <div class="lg-card">
+          <div class="lg-badge badge-lo">🤝 Done With You</div>
+          <h3>We reach out.<br/>You direct strategy.</h3>
+          <p>You stay in control of targeting and messaging. We execute the outreach. Pricing is based on how many prospects we contact each month.</p>
+          <div class="lg-sep"></div>
+          <div class="lg-model-row"><span>Billed by</span><span>Prospects contacted</span></div>
+          <div class="lg-model-row"><span>Scales with</span><span>Monthly volume</span></div>
+          <div class="lg-sep"></div>
+          <ul class="lg-feats">
+            <li><span class="chk">✓</span>Collaborative ICP and sequence planning</li>
+            <li><span class="chk">✓</span>You approve targeting and copy pre-launch</li>
+            <li><span class="chk">✓</span>We execute sending, follow-ups, tracking</li>
+            <li><span class="chk">✓</span>Weekly reporting with full metrics</li>
+            <li><span class="chk">✓</span>Shared Slack for real-time updates</li>
+          </ul>
+          <div class="lg-note">💡 Ideal for teams that want to stay close to outreach without the manual work.</div>
+          <a href="https://cal.com/malyakula-saivamsi-gepsvn/15min" target="_blank" class="btn btn-g" style="border-radius:8px;width:100%;justify-content:center;padding:12px;">Book a Call →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Campaigns -->
+  <div class="p-block fade-up d2">
+    <div class="p-block-head">
+      <div class="p-block-icon">📧</div>
+      <div><div class="p-block-title">Done-For-You Campaigns</div><div class="p-block-sub">Full outreach management — we run it, you take the meetings</div></div>
+      <span class="p-block-badge">$400 entry · $100/meeting</span>
+    </div>
+    <div class="p-block-body">
+      <div class="cp-card">
+        <div>
+          <h3>We handle everything.<br/>You show up to calls.</h3>
+          <p>ICP research, lead lists, copy, sending, A/B testing, and reply management — all done for you. Infrastructure fully included. No hidden domain fees, no extras. You only pay when we book meetings.</p>
+          <ul class="cp-feats">
+            <li>ICP mapping and precision lead research</li>
+            <li>Multi-step personalized sequences</li>
+            <li>Infrastructure fully included — zero extra cost</li>
+            <li>Reply management and calendar booking</li>
+            <li>Weekly optimization and full reporting</li>
+            <li>Results guarantee — or we work free</li>
+          </ul>
+        </div>
+        <div class="cp-right">
+          <div class="cp-from">Entry fee</div>
+          <div class="cp-price">$400</div>
+          <div class="cp-per">then $100 / meeting booked</div>
+          <a href="https://cal.com/malyakula-saivamsi-gepsvn/deliveribility-audit" target="_blank" class="btn btn-o btn-lg2" style="border-radius:8px;width:100%;justify-content:center;">Book a Free Call →</a>
+          <div class="cp-note">3-month minimum · Infra included<br/>No meetings = no charge beyond entry.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="faq-grid">
+    <div class="faq-left">
+      <h2>Questions we get all the time.</h2>
+      <p>Everything else you'd want to know before booking a call. Still have one? We're a message away.</p>
+      <a href="https://cal.com/malyakula-saivamsi-gepsvn/deliveribility-audit" target="_blank" class="btn btn-o" style="border-radius:8px;">Talk to us →</a>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <button class="faq-q">How quickly can you launch a campaign?<span class="faq-arr">▾</span></button>
+        <div class="faq-a"><div class="faq-ai">Most campaigns go live within 5 business days. If you need infrastructure built from scratch, add 3–5 days for warm-up to begin. We've launched in as little as 48 hours for clients with existing domains.</div></div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <button class="faq-q">Can I buy infrastructure without campaigns or leads?<span class="faq-arr">▾</span></button>
+        <div class="faq-a"><div class="faq-ai">Absolutely. Each service is billed independently. Many clients buy just infrastructure ($24/domain) and run campaigns in-house. Others buy leads only. Mix and match however it makes sense for your team.</div></div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <button class="faq-q">What's the difference between Done For You and Done With You?<span class="faq-arr">▾</span></button>
+        <div class="faq-a"><div class="faq-ai">Done For You is fully hands-off — you receive leads or booked meetings with zero involvement. Done With You means you stay in control of strategy and targeting while we execute the outreach. DFY is charged per lead; DWY is based on the volume of prospects we contact monthly.</div></div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <button class="faq-q">Will this hurt my main domain's reputation?<span class="faq-arr">▾</span></button>
+        <div class="faq-a"><div class="faq-ai">Never. We use dedicated sending domains completely separate from your primary domain. Your main brand email is untouched. We monitor reputation continuously and maintain 97%+ inbox placement across all client accounts.</div></div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <button class="faq-q">How many domains do I need for a given send volume?<span class="faq-arr">▾</span></button>
+        <div class="faq-a"><div class="faq-ai">Each domain handles up to 4,000 sends per month safely. Divide your target monthly volume by 4,000 to get the number of domains. Use the pricing calculator in the Pricing section for an instant estimate — it also shows cost-per-send at each volume level.</div></div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <button class="faq-q">Is there a contract or can I cancel anytime?<span class="faq-arr">▾</span></button>
+        <div class="faq-a"><div class="faq-ai">DFY campaigns run on a 3-month minimum — enough runway to see results compound and get a true read on performance. After that, it's rolling monthly with 30 days notice to wind down cleanly. Infrastructure-only is month-to-month from day one. Most clients stay well past the minimum because outbound results keep improving over time.</div></div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <button class="faq-q">What results should I realistically expect?<span class="faq-arr">▾</span></button>
+        <div class="faq-a"><div class="faq-ai">Clients typically see 3–7% reply rates and book 15–80 meetings per month depending on market, offer, and volume. We set honest targets on the strategy call and back them with a results guarantee.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-inner">
+    <div class="hero-eyebrow" style="justify-content:center;margin-bottom:22px;">
+      <span class="live-dot"></span>
+      <span class="eyebrow-text">Free strategy call — no commitment</span>
+    </div>
+    <h2>
+      Stop guessing.<br/>
+      Start <em>closing.</em>
+    </h2>
+    <p>Book a free 30-minute strategy call. We'll audit your outbound, identify gaps, and show you exactly what we'd target for your business.</p>
+    <div class="cta-btns">
+      <a href="https://cal.com/malyakula-saivamsi-gepsvn/deliveribility-audit" target="_blank" class="btn btn-o btn-lg2">Book Your Free Call →</a>
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=sai@chillreach.org&su=Inquiry%20from%20chillreach.ai" target="_blank" class="btn btn-lg2" style="background:transparent;color:#EDEDEF;border:1px solid rgba(255,255,255,0.2);border-radius:9px;">Email us instead</a>
+    </div>
+    <p class="cta-note">No credit card. No pushy sales pitch. Just a real conversation.</p>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+  <span class="lightbox-close">✕</span>
+  <img id="lightboxImg" src="" alt=""/>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="logo"><div class="logo-mark">❄</div><span>chill<span class="hi">reach.ai</span></span></a>
+      <p>Full-service B2B cold email — infrastructure, lead generation, and campaigns — built to fill your pipeline on autopilot.</p>
+      <div class="socials">
+        <a href="https://www.linkedin.com/in/sai-vamsi-chillreach/" target="_blank" class="social" title="LinkedIn"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a href="https://wa.me/919392274091" target="_blank" class="social" title="WhatsApp"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.123 1.532 5.856L.057 23.886a.5.5 0 00.612.612l6.03-1.475A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.96 0-3.792-.5-5.388-1.376l-.386-.214-3.997.977.997-3.997-.214-.386A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg></a>
+      </div>
+    </div>
+    <div class="f-col">
+      <h5>Services</h5>
+      <ul>
+        <li><a href="#services">Email Campaigns</a></li>
+        <li><a href="#services">Lead Generation</a></li>
+        <li><a href="#infra">Infrastructure</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+    </div>
+    <div class="f-col">
+      <h5>Company</h5>
+      <ul>
+        <li><a href="team.html">Our Team</a></li>
+        <li><a href="#cases">Case Studies</a></li>
+        <li><a href="#videos">Testimonials</a></li>
+      </ul>
+    </div>
+    <div class="f-col">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:sai@chillreach.org" class="hi">sai@chillreach.org</a></li>
+        <li><a href="tel:+919392274091">+91 93922 74091</a></li>
+        <li><a href="https://cal.com/malyakula-saivamsi-gepsvn/deliveribility-audit" target="_blank">Book a Call</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 chillreach.ai. All rights reserved.</p>
+    <div class="f-legal">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Canvas dot grid animation
+(function(){
+  const c = document.getElementById('dots');
+  if(!c) return;
+  const ctx = c.getContext('2d');
+  function resize(){ c.width = c.offsetWidth; c.height = c.offsetHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const SPACING = 44;
+  let dots = [];
+  function buildDots(){
+    dots = [];
+    const cols = Math.ceil(c.width / SPACING) + 1;
+    const rows = Math.ceil(c.height / SPACING) + 1;
+    for(let r = 0; r < rows; r++){
+      for(let col = 0; col < cols; col++){
+        dots.push({ x: col*SPACING, y: r*SPACING, o: Math.random()*0.07, t: Math.random()*0.07, s: 0.008 + Math.random()*0.015 });
+      }
+    }
+  }
+  buildDots();
+  window.addEventListener('resize', buildDots);
+
+  setInterval(()=>{
+    const d = dots[Math.floor(Math.random()*dots.length)];
+    d.t = 0.25 + Math.random() * 0.45;
+    setTimeout(()=>{ d.t = Math.random()*0.06; }, 1200 + Math.random()*2000);
+  }, 60);
+
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    dots.forEach(d=>{
+      d.o += (d.t - d.o) * d.s;
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, 1.4, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(255,101,0,${d.o})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── Hamburger menu
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => {
+  mobileMenu.classList.toggle('open');
+  hamburger.textContent = mobileMenu.classList.contains('open') ? '✕' : '☰';
+});
+function closeMobileMenu(){
+  mobileMenu.classList.remove('open');
+  hamburger.textContent = '☰';
+}
+
+// ── Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', ()=> nav.classList.toggle('solid', scrollY > 40));
+
+// ── Service rows expand
+function toggleSvc(row){
+  const body = row.querySelector('.svc-body');
+  const inner = row.querySelector('.svc-body-inner');
+  const isOpen = row.classList.contains('open');
+  document.querySelectorAll('.svc-row').forEach(r=>{
+    r.classList.remove('open');
+    r.querySelector('.svc-body').style.maxHeight = '0';
+  });
+  if(!isOpen){
+    row.classList.add('open');
+    body.style.maxHeight = inner.scrollHeight + 60 + 'px';
+  }
+}
+
+// ── FAQ
+function toggleFaq(item){
+  const a = item.querySelector('.faq-a');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>{ i.classList.remove('open'); i.querySelector('.faq-a').style.maxHeight='0'; });
+  if(!isOpen){ item.classList.add('open'); a.style.maxHeight = item.querySelector('.faq-ai').scrollHeight + 32 + 'px'; }
+}
+
+// ── Scroll animations
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+// ── Pricing slider
+const STEPS = [
+  {sends:10000,  price:100,  domains:3 },
+  {sends:25000,  price:230,  domains:7 },
+  {sends:50000,  price:420,  domains:13},
+  {sends:75000,  price:600,  domains:19},
+  {sends:100000, price:750,  domains:25},
+  {sends:125000, price:910,  domains:32},
+  {sends:150000, price:1060, domains:38},
+  {sends:175000, price:1200, domains:44},
+  {sends:200000, price:1350, domains:50},
+  {sends:250000, price:1650, domains:63},
+];
+const sl = document.getElementById('sl');
+function updateSlider(){
+  const s = STEPS[+sl.value];
+  const pct = (+sl.value/(STEPS.length-1))*100;
+  sl.style.setProperty('--fill', pct+'%');
+  document.getElementById('sVol').textContent = s.sends >= 250000 ? '250K+' : s.sends.toLocaleString();
+  document.getElementById('sPrice').textContent = '$' + s.price.toLocaleString();
+  document.getElementById('sDom').textContent = s.domains;
+  document.getElementById('sCps').textContent = '$' + (s.price/s.sends).toFixed(4);
+  document.getElementById('sDomCost').textContent = '$24';
+  const agencyAvg = s.sends * 0.025;
+  const save = Math.round(((agencyAvg - s.price)/agencyAvg)*100);
+  document.getElementById('sSave').textContent = '~' + Math.max(save,0) + '% less';
+}
+if(sl){ sl.addEventListener('input', updateSlider); updateSlider(); }
+
+// ── Quotes scroll
+function scrollQuotes(dir){
+  const track = document.getElementById('quotesTrack');
+  track.scrollBy({ left: dir * 390, behavior: 'smooth' });
+}
+
+// ── Lightbox
+function openLightbox(src){
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeLightbox(); });
+
+// ── Stat counter animation
+const numObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting) return;
+    const els = e.target.querySelectorAll('.num-val');
+    els.forEach(el=>{
+      const target = parseFloat(el.dataset.target);
+      const suffix = el.dataset.suffix;
+      const isFloat = el.dataset.target.includes('.');
+      let cur = 0;
+      const inc = target / (2000/16);
+      const t = setInterval(()=>{
+        cur += inc;
+        if(cur >= target){ cur = target; clearInterval(t); }
+        el.textContent = (isFloat ? cur.toFixed(1) : Math.floor(cur).toLocaleString()) + suffix;
+      }, 16);
+    });
+    numObs.unobserve(e.target);
+  });
+}, { threshold: 0.5 });
+const numSection = document.getElementById('numbers');
+if(numSection) numObs.observe(numSection);
+</script>
+</body>
+</html>
