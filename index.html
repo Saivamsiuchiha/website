@@ -413,17 +413,13 @@
 
     /* ── PROCESS ── */
     #process{padding:130px 48px;}
-    .process-top{
-      display:flex;align-items:flex-end;
-      justify-content:space-between;margin-bottom:72px;
-      flex-wrap:wrap;gap:20px;
-    }
+    .process-top{margin-bottom:72px;}
     .process-top h2{
       font-family:'Space Grotesk',sans-serif;
       font-size:clamp(1.8rem,3vw,2.6rem);
-      font-weight:700;letter-spacing:-.04em;
+      font-weight:700;letter-spacing:-.04em;margin-bottom:10px;
     }
-    .process-top p{font-size:.88rem;color:var(--muted);max-width:280px;text-align:right;line-height:1.6;}
+    .process-top p{font-size:.88rem;color:var(--muted);line-height:1.6;}
     .process-steps{
       display:grid;grid-template-columns:repeat(6,1fr);
       gap:0;position:relative;
@@ -785,12 +781,12 @@
       font-size:2rem;font-weight:700;letter-spacing:-.04em;
     }
     .s-price-lbl{font-size:.7rem;color:var(--dim);margin-bottom:5px;text-align:right;}
+    .s-price-row{display:flex;align-items:baseline;justify-content:flex-end;gap:4px;}
     .s-price{
       font-family:'Space Grotesk',sans-serif;
       font-size:2rem;font-weight:700;letter-spacing:-.04em;
       background:linear-gradient(135deg,var(--p),var(--gold));
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-      text-align:right;
     }
     .s-period{font-size:.78rem;color:var(--muted);}
     input[type=range]{
@@ -896,7 +892,7 @@
       line-height:1;margin-bottom:4px;
     }
     .cp-per{font-size:.82rem;color:var(--muted);margin-bottom:20px;}
-    .cp-note{font-size:.7rem;color:var(--dim);margin-top:10px;line-height:1.5;}
+    .cp-note{font-size:.7rem;color:#8A8A96;margin-top:10px;line-height:1.5;}
 
     /* ── FAQ ── */
     #faq{
@@ -1050,6 +1046,28 @@
       .pw-grid{grid-template-columns:repeat(2,1fr);}
       #proofwall{padding:60px 20px;}
     }
+
+    /* ── LIGHTBOX ── */
+    .lightbox-overlay{
+      display:none;position:fixed;inset:0;z-index:9998;
+      background:rgba(0,0,0,0.92);
+      align-items:center;justify-content:center;
+      cursor:zoom-out;
+    }
+    .lightbox-overlay.open{display:flex;}
+    .lightbox-overlay img{
+      max-width:90vw;max-height:90vh;
+      border-radius:10px;
+      box-shadow:0 32px 80px rgba(0,0,0,.8);
+      pointer-events:none;
+    }
+    .lightbox-close{
+      position:absolute;top:20px;right:28px;
+      font-size:2rem;color:#EDEDEF;cursor:pointer;
+      line-height:1;opacity:.7;transition:opacity .2s;
+    }
+    .lightbox-close:hover{opacity:1;}
+    .pw-img{cursor:zoom-in;}
 
     /* ── UTILS ── */
     .btn-lg2{padding:14px 32px;font-size:.9rem;border-radius:9px;}
@@ -1665,19 +1683,14 @@
   </div>
   <div class="pw-grid" style="grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:16px;">
 
-    <!-- SCREENSHOT 1: Save as stat1.png in your Downloads folder -->
-    <div class="pw-img">
-      <img src="stat1.png.jpeg" alt="Campaign dashboard — 31,038 leads contacted, 106,498 sent, 1,832 replies"/>
+    <div class="pw-img" onclick="openLightbox('stat1.png.jpeg')">
+      <img src="stat1.png.jpeg" alt="Campaign dashboard — 106,498 sent, 1,832 replies, 7.81% positive reply rate"/>
     </div>
-
-    <!-- SCREENSHOT 2: Save as stat2.png in your Downloads folder -->
-    <div class="pw-img">
-      <img src="stat2.png.jpeg" alt="Campaign dashboard — 31,038 leads contacted, 7.81% positive reply rate"/>
+    <div class="pw-img" onclick="openLightbox('stat2.png.jpeg')">
+      <img src="stat2.png.jpeg" alt="Active campaign — 356 contacts, 7.9% reply rate"/>
     </div>
-
-    <!-- SCREENSHOT 3: Save as stat3.png in your Downloads folder -->
-    <div class="pw-img">
-      <img src="stat3.png" alt="Active campaign — 12% open rate, 356 contacts, 7.9% reply rate"/>
+    <div class="pw-img" onclick="openLightbox('stat3.png')">
+      <img src="stat3.png" alt="Campaign dashboard — 104,006 sent, 17.99% positive reply rate"/>
     </div>
 
   </div>
@@ -1708,28 +1721,19 @@
     <div class="q-card">
       <div class="q-mark">"</div>
       <div class="q-stars">★★★★★</div>
-      <div class="q-text">I was spending 3 hours a day on prospecting. Now I spend zero. They completely took over and we closed a $180K deal in week 6. Best investment we've made.</div>
+      <div class="q-text">We'd burned through two agencies who couldn't keep our domains clean. chillreach.ai rebuilt our entire infrastructure from scratch. Zero burns since — 97% inbox placement, every single month.</div>
       <div class="q-author">
-        <div class="q-av qa3">RL</div>
-        <div><div class="q-name">Ryan Lee</div><div class="q-role">Founder, Primeloop Agency</div></div>
+        <div class="q-av qa3">JT</div>
+        <div><div class="q-name">James Thorpe</div><div class="q-role">Head of Marketing, Bluechain</div></div>
       </div>
     </div>
     <div class="q-card">
       <div class="q-mark">"</div>
       <div class="q-stars">★★★★★</div>
-      <div class="q-text">The lead lists were insane — job titles, company size, tech stack, intent signals. Every prospect matched our ICP. Made our reps 3× more effective overnight.</div>
+      <div class="q-text">Reply rates consistently between 2–6%. That's double what we managed in-house. The sequences don't read like templates — prospects actually respond like it's a real conversation.</div>
       <div class="q-author">
-        <div class="q-av qa4">AM</div>
-        <div><div class="q-name">Alyssa Martinez</div><div class="q-role">VP Sales, Vaultify Financial</div></div>
-      </div>
-    </div>
-    <div class="q-card">
-      <div class="q-mark">"</div>
-      <div class="q-stars">★★★★★</div>
-      <div class="q-text">We went from 0 to a full outbound motion in under a week. The copy they write is genuinely good — not robotic, not spammy. People actually respond because it hits.</div>
-      <div class="q-author">
-        <div class="q-av qa5">TN</div>
-        <div><div class="q-name">Tom Nakamura</div><div class="q-role">CRO, NovaSpark</div></div>
+        <div class="q-av qa4">RS</div>
+        <div><div class="q-name">Ravi Sandeep</div><div class="q-role">Co-founder & COO, Ninternet</div></div>
       </div>
     </div>
     <div class="q-card">
@@ -1787,8 +1791,10 @@
             </div>
             <div>
               <div class="s-price-lbl">Est. monthly cost</div>
-              <div class="s-price" id="sPrice">$100</div>
-              <div class="s-period" id="sPeriod">/mo</div>
+              <div class="s-price-row">
+                <div class="s-price" id="sPrice">$100</div>
+                <div class="s-period">/mo</div>
+              </div>
             </div>
           </div>
           <input type="range" id="sl" min="0" max="9" value="0" step="1"/>
@@ -1799,7 +1805,7 @@
           <div class="s-meta">
             <div class="s-meta-item"><div class="smi-l">Domains needed</div><div class="smi-v" id="sDom">3</div></div>
             <div class="s-meta-item"><div class="smi-l">Cost per send</div><div class="smi-v" id="sCps">$0.0100</div></div>
-            <div class="s-meta-item"><div class="smi-l">Domain cost</div><div class="smi-v" id="sDomCost">$72/mo</div></div>
+            <div class="s-meta-item"><div class="smi-l">Per domain / mo</div><div class="smi-v" id="sDomCost">$24</div></div>
             <div class="s-meta-item"><div class="smi-l">vs agency avg.</div><div class="smi-v" id="sSave">~60% less</div></div>
           </div>
           <a href="https://cal.com/malyakula-saivamsi-gepsvn/deliveribility-audit" target="_blank" class="btn btn-g" style="width:100%;justify-content:center;border-radius:8px;padding:12px;">Book a call to get started →</a>
@@ -1945,11 +1951,17 @@
     <p>Book a free 30-minute strategy call. We'll audit your outbound, identify gaps, and show you exactly what we'd target for your business.</p>
     <div class="cta-btns">
       <a href="https://cal.com/malyakula-saivamsi-gepsvn/deliveribility-audit" target="_blank" class="btn btn-o btn-lg2">Book Your Free Call →</a>
-      <a href="mailto:sai@chillreach.org" class="btn btn-g btn-lg2">Email us instead</a>
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=sai@chillreach.org&su=Inquiry%20from%20chillreach.ai" target="_blank" class="btn btn-lg2" style="background:transparent;color:#EDEDEF;border:1px solid rgba(255,255,255,0.2);border-radius:9px;">Email us instead</a>
     </div>
     <p class="cta-note">No credit card. No pushy sales pitch. Just a real conversation.</p>
   </div>
 </section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+  <span class="lightbox-close">✕</span>
+  <img id="lightboxImg" src="" alt=""/>
+</div>
 
 <!-- FOOTER -->
 <footer>
@@ -1958,9 +1970,8 @@
       <a href="#" class="logo"><div class="logo-mark">❄</div><span>chill<span class="hi">reach.ai</span></span></a>
       <p>Full-service B2B cold email — infrastructure, lead generation, and campaigns — built to fill your pipeline on autopilot.</p>
       <div class="socials">
-        <a href="#" class="social">𝕏</a>
-        <a href="#" class="social">in</a>
-        <a href="#" class="social">▶</a>
+        <a href="https://www.linkedin.com/in/sai-vamsi-chillreach/" target="_blank" class="social" title="LinkedIn"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a href="https://wa.me/919392274091" target="_blank" class="social" title="WhatsApp"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.123 1.532 5.856L.057 23.886a.5.5 0 00.612.612l6.03-1.475A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.96 0-3.792-.5-5.388-1.376l-.386-.214-3.997.977.997-3.997-.214-.386A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg></a>
       </div>
     </div>
     <div class="f-col">
@@ -1978,15 +1989,6 @@
         <li><a href="team.html">Our Team</a></li>
         <li><a href="#cases">Case Studies</a></li>
         <li><a href="#videos">Testimonials</a></li>
-        <li><a href="#">Blog</a></li>
-      </ul>
-    </div>
-    <div class="f-col">
-      <h5>Resources</h5>
-      <ul>
-        <li><a href="#faq">FAQ</a></li>
-        <li><a href="#">Cold Email Guide</a></li>
-        <li><a href="#">Deliverability Checklist</a></li>
       </ul>
     </div>
     <div class="f-col">
@@ -2001,9 +2003,8 @@
   <div class="footer-bottom">
     <p>© 2025 chillreach.ai. All rights reserved.</p>
     <div class="f-legal">
-      <a href="#">Privacy</a>
-      <a href="#">Terms</a>
-      <a href="#">Cookies</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
     </div>
   </div>
 </footer>
@@ -2120,7 +2121,7 @@ function updateSlider(){
   document.getElementById('sPrice').textContent = '$' + s.price.toLocaleString();
   document.getElementById('sDom').textContent = s.domains;
   document.getElementById('sCps').textContent = '$' + (s.price/s.sends).toFixed(4);
-  document.getElementById('sDomCost').textContent = '$' + (s.domains*24) + '/mo';
+  document.getElementById('sDomCost').textContent = '$24';
   const agencyAvg = s.sends * 0.025;
   const save = Math.round(((agencyAvg - s.price)/agencyAvg)*100);
   document.getElementById('sSave').textContent = '~' + Math.max(save,0) + '% less';
@@ -2132,6 +2133,18 @@ function scrollQuotes(dir){
   const track = document.getElementById('quotesTrack');
   track.scrollBy({ left: dir * 390, behavior: 'smooth' });
 }
+
+// ── Lightbox
+function openLightbox(src){
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeLightbox(); });
 
 // ── Stat counter animation
 const numObs = new IntersectionObserver(entries=>{
